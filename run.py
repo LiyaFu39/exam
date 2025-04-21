@@ -6,9 +6,9 @@ import questionary
 
 def load_questions():
     new_data = {}
-    with open("5-選擇題庫全1140224.json", "r", encoding="utf-8") as f:
+    with open("db/5-選擇題庫全1140224.json", "r", encoding="utf-8") as f:
         new_data["選擇題"] = json.load(f)
-    with open("6-是非題庫全1140224.json", "r", encoding="utf-8") as f:
+    with open("db/6-是非題庫全1140224.json", "r", encoding="utf-8") as f:
         new_data["是非題"] = json.load(f)
     return new_data
 
