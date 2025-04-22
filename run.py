@@ -40,22 +40,28 @@ def pick_questions(question_db, num=10):
 
 def main():
     users = load_users()
-    questions = load_questions()
-    questions = change_format(questions)
+    raw_questions = load_questions()
     
     user = questionary.text("輸入你的名稱").ask()
     if user not in users:
-        users[user] = questions
+        users[user] = raw_questions
     else:
-        print(f"歡迎回來 {user}, 你已經練習了 {len(questions) - len(users[user])} / {len(questions)} !!!")
+        print(f"歡迎回來 {user}")
     questions = users[user]
 
     mode = questionary.select("選擇模式", choices=["練習模式", "考試模式"]).ask()
     if mode == "練習模式":
-        finish = False
-        while questionary.confirm("繼續?").ask():
-            random.shuffle(questions)
-            question = questions.pop()
+        question_type = questionary.select("選擇題型", choices=list(questions.keys())).ask()
+        chapter = questionary.select("選擇章節", choices=list(questions[question_type].keys())).ask()
+        question_bank = questions[question_type][chapter]
+        print(f"{chapter} {question_type} 剩餘 {len(questions[question_type][chapter])} / {len(raw_questions[question_type][chapter])} 題")
+        while True:
+            if len(question_bank) == 0:
+                print(f"章節 {chapter} 的 {question_type} 已經全部練習完畢")
+                break
+            
+            random.shuffle(question_bank)
+            question = question_bank.pop()
             user_answer = questionary.select(message=question["題目"], choices=question["選項"],).ask()
             true_answer = question["答案"]
             if true_answer == "O":
@@ -65,9 +71,13 @@ def main():
             true_answer = question["選項"][int(true_answer) - 1]
             
             if user_answer != true_answer:
-                questions.append(question)
+                question_bank.append(question)
             print(f"{user_answer == true_answer} 答案是 {true_answer}")
-        users[user] = questions
+
+            if not questionary.confirm("繼續?").ask():
+                break
+            
+        users[user][question_type][chapter] = question_bank
         dump_users(users)
         print("進度已記錄 bye ...")
 
