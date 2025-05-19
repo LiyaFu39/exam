@@ -4,6 +4,19 @@ import random
 import questionary
 
 
+def update_questions(data):
+    with open("db/5-select-1140519.json", "r", encoding="utf-8") as f:
+        new_data = json.load(f)
+        for key in json.load(f):
+            data["選擇題"][key].append(new_data[key])
+    with open("db/5-yesno-1140519.json", "r", encoding="utf-8") as f:
+        new_data = json.load(f)
+        for key in json.load(f):
+            data["是非題"][key].append(new_data[key])
+    return data
+    
+
+
 def load_questions():
     new_data = {}
     with open("db/5-select-1140224.json", "r", encoding="utf-8") as f:
