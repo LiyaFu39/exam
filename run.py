@@ -7,12 +7,12 @@ import questionary
 def update_questions(data):
     with open("db/5-select-1140519.json", "r", encoding="utf-8") as f:
         new_data = json.load(f)
-        for key in json.load(f):
-            data["選擇題"][key].append(new_data[key])
-    with open("db/5-yesno-1140519.json", "r", encoding="utf-8") as f:
+        for key in new_data:
+            data["選擇題"][key].extend(new_data[key])
+    with open("db/6-yesno-1140519.json", "r", encoding="utf-8") as f:
         new_data = json.load(f)
-        for key in json.load(f):
-            data["是非題"][key].append(new_data[key])
+        for key in new_data:
+            data["是非題"][key].extend(new_data[key])
     return data
     
 
@@ -23,6 +23,7 @@ def load_questions():
         new_data["選擇題"] = json.load(f)
     with open("db/6-yesno-1140224.json", "r", encoding="utf-8") as f:
         new_data["是非題"] = json.load(f)
+    new_data = update_questions(new_data)
     return new_data
 
 
