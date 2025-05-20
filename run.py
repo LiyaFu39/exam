@@ -79,9 +79,9 @@ def main():
             user_answer = questionary.select(message=question["題目"], choices=question["選項"],).ask()
             true_answer = question["答案"]
             if true_answer == "O":
-                true_answer = 0
-            if true_answer == "X":
                 true_answer = 1
+            if true_answer == "X":
+                true_answer = 2
             true_answer = question["選項"][int(true_answer) - 1]
             
             if user_answer != true_answer:
@@ -126,9 +126,9 @@ def main():
             user_answer = questionary.select(message=f"第 {index} 題: {question['題目']}", choices=question["選項"],).ask()
             true_answer = question["答案"]
             if true_answer == "O":
-                true_answer = 0
-            if true_answer == "X":
                 true_answer = 1
+            if true_answer == "X":
+                true_answer = 2
             true_answer = question["選項"][int(true_answer) - 1]
             print(f"{user_answer == true_answer} 答案是 {true_answer}")
             index += 1
