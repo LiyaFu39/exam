@@ -37,7 +37,6 @@ def main(args):
         text = page.extract_text()
         # 1. 移除「資料產生日期」和頁碼、編號、答案、試題字樣
         text = re.sub(r"資料產生日期：\d{3}/\d{2}/\d{2}", "", text)
-        text = text.replace("編號答案試題", "")
         match = re.search(r'\n[\u3000-\u303F\u4e00-\u9fff]+?\n選擇題', text)
         if match:
             chapter = match.group(0).replace("\n", "").replace("選擇題", "")
@@ -51,7 +50,11 @@ def main(args):
 
     for key in chapters:
         context = chapters[key]
-        context = context.replace("\n", "").replace(" ", "")
+        context = context.replace("\n", " ")
+        context = re.sub(r"第 \d+ 條", "", context)
+        context = context.replace(" ", "")
+        context = context.replace("編號答案試題", "")
+        context = context.replace("依據法源", "")
         chapters[key] = extract_mc_questions(context)
         
         # # 2. 捕獲章節名稱（透過「選擇題」前的文字判斷）
